@@ -16,25 +16,17 @@ def menu():
 
 
 
-def bubbleSort(lista):
-    for num in range(len(lista) -1,0,-1):
-        for j in range(num):
-            if lista[j][4]>lista[j+1][4]:
-                aux=lista[j]
-                lista[j]=lista[j+1]
-                lista[j+1]=aux
-    return lista
-
-
-
-def Archivo(posicion):
+def Edit(posicion,pos2):
     Alumnos.seek(0)
     data=Alumnos.readlines()
     Alumnos.seek(0)
-    lista_de_alumnos[posicion][4]=str(lista_de_alumnos[posicion][4])
     for linea in data:
         if linea != "-+-".join(lista_de_alumnos[posicion])+"-+-\n":
             Alumnos.write(linea)
+        else:
+            nuevo_valor=input("Ingrese nuevo dato: ")
+            lista_de_alumnos[posicion][pos2]=str(nuevo_valor)
+            Alumnos.write("-+-".join(lista_de_alumnos[posicion])+"-+-\n")
     Alumnos.truncate()
 
 
@@ -56,6 +48,8 @@ def ID(ID_Registro):
     for i in range(0,len(lista_de_alumnos)):
         if lista_de_alumnos[i][4] == str(ID_Registro):
             return i
+    print("No se encontró el ID")
+
 
 def crear(lista):
 
@@ -82,6 +76,9 @@ def crear(lista):
 
 
 def buscar(lista_donde_se_buscara_el_valor, valor_a_buscar):
+    #Agregar un algoritmo que permita buscar los registros en la lista_donde_se_buscara_el_valor que cumplan con el valor_a_buscar.
+    #Deberá mostrar los registros que coincidan.
+    print("Funcionalidad de buscar")
     for i in range(0,len(lista_donde_se_buscara_el_valor)):
         for j in range(0,5):
             for busqueda in lista_donde_se_buscara_el_valor[i][j]:
@@ -91,11 +88,8 @@ def buscar(lista_donde_se_buscara_el_valor, valor_a_buscar):
                         i=i+1
                     else:
                         return
+    print("No se encontró el valor solicitado")
 
-
-    #Agregar un algoritmo que permita buscar los registros en la lista_donde_se_buscara_el_valor que cumplan con el valor_a_buscar.
-    #Deberá mostrar los registros que coincidan.
-    print("Funcionalidad de buscar")
 
     return
 
@@ -120,11 +114,7 @@ def editar(lista, ID_Registro):
         elif int(input("¿Seguir?:\n [1]Sí\n [0]No\n")) == 0:
             seguir=False
         else:
-            nuevo_valor=input("Ingrese nuevo dato: ")
-            Archivo(pos)
-            lista[pos][valor_a_cambiar]=str(nuevo_valor)
-            Alumnos.write("-+-".join(lista[pos])+"-+-\n")
-            print(lista[pos])
+            Edit(pos,valor_a_cambiar)
     lista_modificada=lista
     return lista_modificada
 
@@ -132,10 +122,15 @@ def editar(lista, ID_Registro):
 
 def eliminar(lista, ID_Registro):
     pos=ID(ID_Registro)
-    Archivo(pos)
+    Alumnos.seek(0)
+    data=Alumnos.readlines()
+    Alumnos.seek(0)
+    for linea in data:
+        if linea != "-+-".join(lista_de_alumnos[pos])+"-+-\n":
+            Alumnos.write(linea)
+    Alumnos.truncate()
     lista.remove(lista[pos])
     lista_modificada = lista
-    print(lista)
 
     print("Funcionalidad de eliminar")
 
@@ -182,8 +177,6 @@ def ver_historial(lista_de_mensaje):
     return
 
 
-
-from operator import itemgetter
 import time
 Alumnos=open("Alumnos.txt","r+")
 Mensajes=open("Mensajes.txt","r+")
@@ -192,8 +185,6 @@ lista_de_mensajes = []
 for i,line in enumerate(Alumnos):
     lista_de_alumnos.append(line.split("-+-"))
     lista_de_alumnos[i].pop()
-bubbleSort(lista_de_alumnos)
-print(lista_de_alumnos)
 for i,line in enumerate(Mensajes):
     lista_de_mensajes.append(line.split("-+-"))
     lista_de_mensajes[i].pop()
