@@ -16,21 +16,6 @@ def menu():
 
 
 
-def Edit(posicion,pos2):
-    Alumnos.seek(0)
-    data=Alumnos.readlines()
-    Alumnos.seek(0)
-    for linea in data:
-        if linea != "-+-".join(lista_de_alumnos[posicion])+"-+-\n":
-            Alumnos.write(linea)
-        else:
-            nuevo_valor=input("Ingrese nuevo dato: ")
-            lista_de_alumnos[posicion][pos2]=str(nuevo_valor)
-            Alumnos.write("-+-".join(lista_de_alumnos[posicion])+"-+-\n")
-    Alumnos.truncate()
-
-
-
 def seguridad(dato):
     seguir=True
     while seguir==True:
@@ -49,6 +34,8 @@ def ID(ID_Registro):
         if lista_de_alumnos[i][4] == str(ID_Registro):
             return i
     print("No se encontró el ID")
+    return -7
+
 
 
 def crear(lista):
@@ -60,7 +47,7 @@ def crear(lista):
     # 4. Teléfono
     # 5. ID_Registro --> Este código se va a generar automáticamente de manera correlativa y será el identificador para manipular el registro en la lista.
     registro=[]
-    print("Funcionalidad de crear")
+    print("\nFuncionalidad de crear")
     registro.append(input("1. Nombres: "))
     registro.append(input("2. Apellido Paterno: "))
     registro.append(input("3. Edad: "))
@@ -78,7 +65,7 @@ def crear(lista):
 def buscar(lista_donde_se_buscara_el_valor, valor_a_buscar):
     #Agregar un algoritmo que permita buscar los registros en la lista_donde_se_buscara_el_valor que cumplan con el valor_a_buscar.
     #Deberá mostrar los registros que coincidan.
-    print("Funcionalidad de buscar")
+    print("\nFuncionalidad de buscar")
     for i in range(0,len(lista_donde_se_buscara_el_valor)):
         for j in range(0,5):
             for busqueda in lista_donde_se_buscara_el_valor[i][j]:
@@ -102,9 +89,10 @@ def editar(lista, ID_Registro):
     # 2. Apellido Paterno
     # 3. Edad
     # 4. Teléfono
-    seguir=True
+    print("\nFuncionalidad de editar")
     pos=ID(ID_Registro)
     print(lista[pos])
+    seguir=True
     while seguir==True:
         valor_a_cambiar=int(input("¿Qué valor desea cambiar?\n [0]Nombre\n [1]Apellido\n [2]Edad\n [3]Teléfono\n [4]Salir\n"))
         while not -1 < valor_a_cambiar < 5:
@@ -114,13 +102,27 @@ def editar(lista, ID_Registro):
         elif int(input("¿Seguir?:\n [1]Sí\n [0]No\n")) == 0:
             seguir=False
         else:
-            Edit(pos,valor_a_cambiar)
+            Alumnos.seek(0)
+            data=Alumnos.readlines()
+            Alumnos.seek(0)
+            for linea in data:
+                if linea != "-+-".join(lista[pos])+"-+-\n":
+                    Alumnos.write(linea)
+                else:
+                    nuevo_valor=input("Ingrese nuevo dato: ")
+                    lista[pos][valor_a_cambiar]=str(nuevo_valor)
+                    print(lista[pos])
+                    Alumnos.write("-+-".join(lista[pos])+"-+-\n")
+                    Alumnos.truncate()
     lista_modificada=lista
     return lista_modificada
 
 
 
 def eliminar(lista, ID_Registro):
+
+    print("\nFuncionalidad de eliminar")
+
     pos=ID(ID_Registro)
     Alumnos.seek(0)
     data=Alumnos.readlines()
@@ -131,8 +133,6 @@ def eliminar(lista, ID_Registro):
     Alumnos.truncate()
     lista.remove(lista[pos])
     lista_modificada = lista
-
-    print("Funcionalidad de eliminar")
 
     return lista_modificada
 
@@ -145,6 +145,8 @@ def mensaje(emisor, receptor, mensaje, lista_de_mensajes):
     # ID_Registro_del_receptor
     # Contenido del Mensaje
     # Fecha y hora del mensaje --> Este valor debe generarse automáticamente
+
+    print("\nFuncionalidad de mensaje")
 
     msn=[]
     FH="Fecha: "+time.strftime("%d/%m/%y")+" / Hora: "+time.strftime("%H:%M:%S")
@@ -159,7 +161,7 @@ def mensaje(emisor, receptor, mensaje, lista_de_mensajes):
     Mensajes.write("-+-".join(msn)+"-+-\n")
     lista_de_mensajes.append(msn)
 
-    print("Funcionalidad de mensaje")
+
     return lista_de_mensajes
 
 
@@ -169,17 +171,25 @@ def ver_historial(lista_de_mensaje):
     # Nombres y apellido del emisor |  Nombres y apellido del receptor  |  Fecha y hora del mensaje  |  Contenido del Mensaje
     # El historial debe mostrarse ordenado por Emisor , Receptor y Fecha y hora del mensaje
 
+    print("\nFuncionalidad de ver historial")
     for p in range(len(lista_de_mensaje)-1,-1,-1):
         print(lista_de_mensaje[p])
 
-    print("Funcionalidad de ver historial")
 
     return
 
 
 import time
-Alumnos=open("Alumnos.txt","r+")
-Mensajes=open("Mensajes.txt","r+")
+try:
+    Alumnos=open("Alumnos.txt","r+")
+    Mensajes=open("Mensajes.txt","r+")
+except IOError:
+    A=open("Alumnos.txt","w+")
+    M=open("Mensajes.txt","w+")
+    A.close()
+    M.close()
+    Alumnos=open("Alumnos.txt","r+")
+    Mensajes=open("Mensajes.txt","r+")
 lista_de_alumnos = []
 lista_de_mensajes = []
 for i,line in enumerate(Alumnos):
