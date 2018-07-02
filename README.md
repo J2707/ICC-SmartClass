@@ -33,8 +33,6 @@ def ID(ID_Registro):
     for i in range(0,len(lista_de_alumnos)):
         if lista_de_alumnos[i][4] == str(ID_Registro):
             return i
-    print("No se encontró el ID")
-    return -7
 
 
 
