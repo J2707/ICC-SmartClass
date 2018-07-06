@@ -46,15 +46,16 @@ def crear(lista):
     # 5. ID_Registro --> Este código se va a generar automáticamente de manera correlativa y será el identificador para manipular el registro en la lista.
     registro=[]
     print("\nFuncionalidad de crear")
-    registro.append(input("1. Nombres: "))
-    registro.append(input("2. Apellido Paterno: "))
-    registro.append(input("3. Edad: "))
-    registro.append(input("4. Teléfono: "))
+    intro=["1. Nombres: ","2. Apellido Paterno: ","3. Edad: ","4. Teléfono: ","5. ID_Registro: "]
+    registro.append(input(intro[0]))
+    registro.append(input(intro[1]))
+    registro.append(input(intro[2]))
+    registro.append(input(intro[3]))
     registro.append(str(contador))
     Alumnos.write("-+-".join(registro)+"-+-\n")
     lista.append(registro)
-    print("5. ID_Registro: ",lista[len(lista)-1][4])
-    print(lista[len(lista)-1])
+    for i,dat in enumerate (registro):
+        print(intro[i]+dat)
     lista_modificada = lista
     return lista_modificada
 
